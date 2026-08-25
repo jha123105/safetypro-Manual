@@ -1,4 +1,4 @@
-cat > USER-MANUAL.md << 'EOF'
+
 # SafetyPro Rescue - Inventory Management System
 
 ## User Manual
@@ -17,7 +17,9 @@ cat > USER-MANUAL.md << 'EOF'
 9. [Reports](#reports)
 10. [Settings](#settings)
 11. [Backup System](#backup-system)
-12. [User Roles](#user-roles)
+12. [Notifications](#notifications)
+13. [User Roles](#user-roles)
+14. [Remote Access (Tailscale)](#remote-access-tailscale)
 
 ---
 
@@ -25,17 +27,17 @@ cat > USER-MANUAL.md << 'EOF'
 
 ### System Requirements
 - Windows 10/11
-- Node.js LTS (for setup)
+- Node.js LTS
 - Any modern browser (Chrome recommended)
 
 ### Installation
-1. Extract the project folder
+1. Extract the ZIP folder
 2. Run `setup-windows.bat` (one-time)
-3. Run `start-safetypro.bat` (every time)
+3. Run `setup-autostart.bat` (optional - auto start with Windows)
 
 ### Accessing the System
 - **Local:** `http://localhost:3000`
-- **Network:** Check Settings → Network Access for IP
+- **Network:** Settings → Network Access
 
 ---
 
@@ -48,33 +50,33 @@ cat > USER-MANUAL.md << 'EOF'
 | Staff | staff | staff123 |
 
 ### Features
-- Remember Me checkbox saves username
+- Remember Me — Saves username
 - Password show/hide toggle
-- Forgot password contact admin
+- Session timeout — Auto-logout after 30 min inactive
+- Change Password — Via user menu dropdown
 
 ---
 
 ## Dashboard
 
-The dashboard shows:
-
 ### Statistics Cards
-- **Total Products** - Number of products in system
-- **In Stock** - Products above reorder level
-- **Low Stock** - Products below reorder level
-- **Out of Stock** - Products with zero quantity
+- **Total Products** — All products in system
+- **In Stock** — Above reorder level
+- **Low Stock** — Below reorder level
+- **Out of Stock** — Zero quantity
 
 ### Inventory Value
 - Total value of all stock (quantity × price)
 
 ### Widgets
-- **Category Summary** - Top 6 categories by quantity
-- **Low Stock Alerts** - Products needing reorder
-- **Recent Transactions** - Last 5 stock movements
+- **Category Summary** — Products per category
+- **Low Stock Alerts** — Scrollable list
+- **Recent Transactions** — Last 10 movements
 
-### Inventory Overview Table
-- Search products by name, code, or category
-- Color-coded status badges
+### Inventory Table
+- Search by name, code, or category
+- Color-coded stock status
+- Auto-refresh every 5 seconds
 
 ---
 
@@ -97,7 +99,12 @@ The dashboard shows:
 2. Search for product
 3. Click product from results
 4. Enter quantity
-5. Select reason (Sold, Used, Damaged, Expired, Other)
+5. Select reason:
+   - Sold
+   - Used
+   - Damaged
+   - Expired
+   - Other
 6. Click **Remove Stock**
 7. Confirm in modal
 
@@ -105,153 +112,161 @@ The dashboard shows:
 
 ## Physical Count
 
-### Monthly Inventory Count
+### Monthly Inventory
 1. Go to **Physical Count** tab
-2. Search products
-3. Count actual items on shelf
-4. Enter actual quantity
-5. Click Update button or Update All
+2. Count actual items on shelf
+3. Enter actual quantity
+4. Click Update (per item) or Update All
+5. Confirm in modal
 
-### Difference Display
-- **Green (+)** = More than system
-- **Red (-)** = Less than system
+### Difference Colors
+- 🟢 Green (+) = More than system
+- 🔴 Red (-) = Less than system
 
 ---
 
 ## Products
 
-### Viewing Products
-- Search by name, code, or category
+### Viewing
+- Search by name, code, category
 - Sort by name, code, quantity, price
-- Filter by status (In Stock, Low Stock, Out of Stock)
+- Filter by status
 
-### Adding Products
+### Stock Status Colors
+- 🟢 Green = Above reorder
+- 🟡 Yellow = Below reorder
+- 🔴 Red = Out of stock
+
+### Adding (Admin only)
 1. Click **Add Product**
 2. Item Code auto-generated
-3. Enter product name
-4. Select category (or add new)
-5. Enter quantity
-6. Select unit (or add new)
-7. Enter price
-8. Enter reorder level
-9. Click Save
+3. Enter name, category, quantity, unit, cost price, selling price, reorder level
+4. Click Save
 
-### Editing Products (Admin only)
-1. Click three-dot menu
-2. Select Edit
-3. Modify fields
-4. Click Save Changes
+### Editing (Admin only)
+1. Click 3-dot menu → Edit
+2. Modify fields
+3. Save Changes
 
-### Deleting Products (Admin only)
-1. Click three-dot menu
-2. Select Delete
-3. Confirm in modal
-
-### Stock Quantity Colors
-- 🟢 Green = Above reorder level
-- 🟡 Yellow = Below reorder level
-- 🔴 Red = Out of stock
+### Deleting (Admin only)
+1. Click 3-dot menu → Delete
+2. Confirm
 
 ---
 
 ## Transactions
 
-### Viewing History
-- Search by name, code, or reason
-- Filter by type (Stock In/Out)
+- Search by name, code, reason
+- Filter by type (IN/OUT)
 - Filter by date range
-
-### Transaction Types
-- **IN** - Stock added
-- **OUT** - Stock removed
+- Shows who performed each transaction
 
 ---
 
 ## Reports
 
-### Report Types
-1. **Inventory Report** - All products with values
-2. **Low Stock Report** - Products below reorder
-3. **Transactions Report** - Stock movements
-4. **Stock Movement Report** - Per-product summary
-5. **Category Summary** - By category
+### Types
+1. **Inventory Report** — Stock levels and values
+2. **Low Stock Report** — Items below reorder
+3. **Transactions Report** — Stock movements
+4. **Stock Movement Report** — Per-product summary
+5. **Category Summary** — By category
+6. **Profit Report** — Cost vs Revenue analysis
 
-### Export Options
-- **PDF** - With company logo and info
-- **Excel** - With company header
-- **CSV** - Simple format
+### Export
+- **PDF** — With logo and business info
+- **Excel** — Editable spreadsheet
+- **CSV** — Simple format
 
 ### Filters
 - Date range
 - Type filter
 - Sort options
-- Search within report
+- Category filter
+- Search
 
 ---
 
 ## Settings
 
 ### Business Information
-- Business name
-- Address
-- Phone number
-- Email
+- Business name, address, phone, email
 - Receipt footer message
-
-### Network Access
-- View local and network IPs
-- Copy button for easy sharing
 
 ### User Management (Admin only)
 - Add users
-- Edit users (username, name, role, password)
+- Edit users
 - Delete staff users
 - Deactivate/Activate staff
 
 ### Data Management
-- Export data (JSON)
-- Import data (Replace or Merge)
-- Create manual backup
-- View backups
+- Export/Import JSON
+- Create backup
+- View/restore backups
 - Reset to sample data
 - Clear all data
+
+### Network Access
+- View local and network IPs
+- Tailscale IP for remote access
+- Copy buttons
+
+### Activity Log (Admin only)
+- See all user actions
+- Login/logout tracking
+- Stock operations
 
 ---
 
 ## Backup System
 
-### Automatic Backup
-- Created every time server starts
+### Automatic
+- Every server start
 - Keeps last 14 backups
 
-### Manual Backup
-1. Go to Settings → Data Management
-2. Click **Create Backup**
+### Manual
+- Settings → Data Management → Create Backup
 
-### Restoring Backup
-1. Click **View Backups**
-2. Find backup to restore
-3. Click restore icon
-4. Type "RESTORE" to confirm
-5. Database restored instantly
+### Restore
+1. View Backups
+2. Select backup
+3. Type "RESTORE"
+4. Confirm
+
+---
+
+## Notifications
+
+### Bell Icon (Top Bar)
+- Low stock alerts
+- Stock out notifications
+- Staff login alerts
+- Backup created
+- Product deleted
+
+### Features
+- Badge with unread count
+- Click to mark as read
+- Clear all
+- Shows who performed action
 
 ---
 
 ## User Roles
 
 ### Admin
-- Full access to all features
-- Manage users
-- Manage products (add/edit/delete)
+- Full access
+- User management
+- Product management
 - Physical count
 - All reports
 - Data management
+- Activity log
 
 ### Staff
-- Dashboard (view)
-- Stock In
-- Stock Out
-- Products (view only)
+- Dashboard
+- Stock In/Out
+- Products (view)
 - Transactions (view)
 - Reports (view)
 
@@ -263,24 +278,38 @@ The dashboard shows:
 
 ---
 
+## Remote Access (Tailscale)
+
+### Setup
+1. Install Tailscale on shop PC
+2. Install Tailscale on phone/laptop
+3. Sign in with same account
+4. Use Tailscale IP to access
+
+### Steps
+1. Download: https://tailscale.com/download
+2. Install and sign in
+3. Check Settings → Network Access for Tailscale IP
+4. Access from anywhere!
+
+---
+
 ## Troubleshooting
 
 ### Server won't start
-- Make sure Node.js is installed
-- Check if port 3000 is free
-- Run `npm install` again
+- Check Node.js installed
+- Port 3000 free
+- Run `npm install`
 
 ### Can't login
-- Check username and password
-- Make sure user is active
-
-### Browser shows error
-- Hard refresh (Ctrl+Shift+R)
-- Clear browser cache
+- Check username/password
+- User might be deactivated
 
 ### Data lost
 - Restore from backup
-- Check backups folder
+
+### Browser error
+- Hard refresh (Ctrl+Shift+R)
 
 ---
 
@@ -294,4 +323,3 @@ The dashboard shows:
 ---
 
 *Version 1.0 - August 2026*
-EOF
